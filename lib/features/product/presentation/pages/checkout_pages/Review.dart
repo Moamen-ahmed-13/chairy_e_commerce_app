@@ -133,7 +133,7 @@ class Review extends StatelessWidget {
         ),
         SizedBox(height: 20),
         Container(
-          height: 120,
+          height: 130,
           width: 150,
           decoration: BoxDecoration(
             color: Colors.grey.shade200,

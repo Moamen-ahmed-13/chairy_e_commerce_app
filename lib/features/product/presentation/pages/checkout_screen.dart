@@ -152,7 +152,7 @@ class CheckoutScreen extends StatelessWidget {
           Container(
             // خط رمادي للمراحل القادمة
             height: 1,
-            width: 20,
+            width: 15,
             decoration: BoxDecoration(
               color: isDone
                   ? Color.fromARGB(255, 4, 221, 65)
