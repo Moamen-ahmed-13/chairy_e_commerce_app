@@ -1,4 +1,5 @@
 import 'package:chairy_e_commerce_app/constants.dart';
+import 'package:chairy_e_commerce_app/features/product/domain/entities/cart_item.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_bloc/cart_bloc.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_bloc/cart_event.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_bloc/cart_state.dart';
@@ -9,8 +10,13 @@ import '../../domain/entities/product.dart';
 import '../pages/product_details_screen.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key, required this.product, required this.index});
-  final ProductEntity product;
+  ProductCard({
+    super.key,
+    required this.index,
+    required this.productEntity,
+  });
+
+  final ProductEntity productEntity;
   final int index;
   static const List<String> assetImages = [
     "assets/images/baltsar_ikea_chair.png",
@@ -29,7 +35,7 @@ class ProductCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ProductDetailsScreen(
-              product: product,
+              product: productEntity,
               imageUrl: imageUrl,
             ),
           ),
@@ -78,13 +84,15 @@ class ProductCard extends StatelessWidget {
                 Text('Chair',
                     style: TextStyle(color: Colors.grey, fontSize: 12)),
                 Text(
-                  product.title ?? '',
+                  productEntity.title ?? '',
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 20),
-                product.discount != '0.00' ? hasDiscount() : hasNoDiscount(),
+                productEntity.discount != '0.00'
+                    ? hasDiscount()
+                    : hasNoDiscount(),
               ],
             ),
           ],
@@ -108,7 +116,7 @@ class ProductCard extends StatelessWidget {
             ),
             SizedBox(width: 4),
             Text(
-              '${product.price}',
+              '${productEntity.price}',
               style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -129,7 +137,7 @@ class ProductCard extends StatelessWidget {
             ),
             SizedBox(width: 4),
             Text(
-              product.discountPrice.toString(),
+              productEntity.discountPrice.toString(),
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             SizedBox(width: 4),
@@ -138,7 +146,7 @@ class ProductCard extends StatelessWidget {
               decoration: BoxDecoration(
                   color: mainColor, borderRadius: BorderRadius.circular(20)),
               child: Text(
-                "${product.discount}%",
+                "${productEntity.discount}%",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 10,
@@ -150,7 +158,12 @@ class ProductCard extends StatelessWidget {
               builder: (context, state) {
                 return GestureDetector(
                   onTap: () {
-                    context.read<CartBloc>().add(AddToCartEvent(product!));
+                    context.read<CartBloc>().add(AddToCart(CartItem(
+                          id: productEntity.id,
+                          title: productEntity.title,
+                          price: productEntity.price,
+                          quantity: productEntity.quantity,
+                        )));
                     print('add to cart');
                   },
                   child: Container(
@@ -187,7 +200,7 @@ class ProductCard extends StatelessWidget {
             ),
             SizedBox(width: 4),
             Text(
-              '${product.price}',
+              '${productEntity.price}',
               style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
             Spacer(),
@@ -195,7 +208,12 @@ class ProductCard extends StatelessWidget {
               builder: (context, state) {
                 return GestureDetector(
                   onTap: () {
-                    context.read<CartBloc>().add(AddToCartEvent(product!));
+                    context.read<CartBloc>().add(AddToCart(CartItem(
+                      id: productEntity.id,
+                      title: productEntity.title,
+                      price: productEntity.price,
+                      quantity: productEntity.quantity,
+                    )));
                     print('add to cart');
                   },
                   child: Container(

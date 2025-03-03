@@ -80,13 +80,14 @@ class CartScreen extends StatelessWidget {
                     }
                     return _buildCartList(state);
                   } else if (state is CartError) {
+                    print(state.message);
                     return Center(child: Text("Failed to load cart items"));
                   }
                   return SizedBox.shrink();
                 },
               ),
             ),
-            _buildCartSummary(context),
+            _buildCartTotalPrice(context),
           ],
         ),
       ),
@@ -123,11 +124,22 @@ class CartScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: () {
+              // ✅ Convert `CartItem` to `ProductEntity` before passing it
+              ProductEntity productEntity = ProductEntity(
+                id: state.cartItems[index].id,
+                title: state.cartItems[index].title,
+                description:
+                    "The ${state.cartItems[index].title} combines modern elegance with exceptional comfort. Designed for professionals, this chair features a sleek, ergonomic design with premium leather upholstery and a swivel base, making it perfect for office spaces or home offices. Its timeless design ensures it complements any decor.", // Add proper description
+                price: state.cartItems[index].price,
+                discount: "0", // Adjust discount if needed
+                discountPrice: state.cartItems[index].price, // Modify if needed
+                quantity: state.cartItems[index].quantity,
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => ProductDetailsScreen(
-                    product: state.cartItems[index],
+                    product: productEntity,
                     imageUrl:
                         _getProductImagePath(state.cartItems[index].title),
                   ),
@@ -135,24 +147,92 @@ class CartScreen extends StatelessWidget {
               );
             },
             child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              leading: Container(
+                height: 150,
+                width: 70,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      _getProductImagePath(state.cartItems[index].title),
+                    ),
+                  ),
+                ),
+              ),
               title: Text(
-                state.cartItems[index].title,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                "    ${state.cartItems[index].title}",
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
-              subtitle: SizedBox(
-                width: 100,
-                child: _quantityControls(context, state.cartItems[index]),
+              subtitle: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        context
+                            .read<CartBloc>()
+                            .add(RemoveFromCart(state.cartItems[index].id));
+                      },
+                      icon: Icon(
+                        Icons.delete_outline_outlined,
+                        color: Colors.red,
+                      )),
+                  SizedBox(width: 8),
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: IconButton(
+                      iconSize: 15,
+                      style: IconButton.styleFrom(
+                        backgroundColor: mainColor,
+                      ),
+                      color: Colors.white,
+                      icon: Icon(Icons.remove),
+                      onPressed: () {
+                        if (state.cartItems[index].quantity > 1) {
+                          context.read<CartBloc>().add(UpdateCartQuantity(
+                              state.cartItems[index].id,
+                              state.cartItems[index].quantity - 1));
+                        } else {
+                          context
+                              .read<CartBloc>()
+                              .add(RemoveFromCart(state.cartItems[index].id));
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    state.cartItems[index].quantity.toString(),
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                  ),
+                  SizedBox(width: 10),
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: IconButton(
+                      iconSize: 15,
+                      style: IconButton.styleFrom(
+                        backgroundColor: mainColor,
+                      ),
+                      color: Colors.white,
+                      icon: Icon(Icons.add),
+                      onPressed: () {
+                        context.read<CartBloc>().add(UpdateCartQuantity(
+                            state.cartItems[index].id,
+                            state.cartItems[index].quantity + 1));
+                      },
+                    ),
+                  ),
+                ],
               ),
-              leading: Image.asset(
-                  _getProductImagePath(state.cartItems[index].title),
-                  errorBuilder: (context, error, stackTrace) =>
-                      Image.asset('assets/images/bouclé_chair.png'),
-                  height: 70,
-                  width: 70,
-                  fit: BoxFit.cover),
               trailing: Text(
-                '₤ ${state.cartItems[index].discountPrice}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                '₤ ${state.cartItems[index].price.toStringAsFixed(2)}',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15),
               ),
             ),
           );
@@ -168,30 +248,7 @@ class CartScreen extends StatelessWidget {
     return 'assets/images/$formattedTitle.png'; // إرجاع المسار الصحيح
   }
 
-  Widget _quantityControls(BuildContext context, ProductEntity cartItem) {
-    return Row(
-      children: [
-        IconButton(
-          icon: Icon(Icons.remove, color: mainColor),
-          onPressed: () {
-            context.read<CartBloc>().add(UpdateCartQuantity(cartItem, -1));
-          },
-        ),
-        Text(
-          cartItem.quantity.toString(),
-          style: TextStyle(fontSize: 16),
-        ),
-        IconButton(
-          icon: Icon(Icons.add, color: mainColor),
-          onPressed: () {
-            context.read<CartBloc>().add(UpdateCartQuantity(cartItem, 1));
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCartSummary(BuildContext context) {
+  Widget _buildCartTotalPrice(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {

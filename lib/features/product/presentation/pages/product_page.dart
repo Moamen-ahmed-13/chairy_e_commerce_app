@@ -9,9 +9,21 @@ import '../blocs/product_bloc/product_bloc.dart';
 import '../blocs/product_bloc/product_state.dart';
 import '../widgets/product_card.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   ProductPage({super.key});
+
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
   List<ProductEntity> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProductBloc>().add(LoadProductEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,40 +119,44 @@ class ProductPage extends StatelessWidget {
                 ),
                 itemCount: state.products.length,
                 itemBuilder: (context, index) {
-                  
                   return ProductCard(
-                    product: state.products[index],
+                    productEntity: state.products[index],
                     index: index,
                   );
                 }),
           );
         } else if (state is ProductError) {
-          return Center(
-            child: MaterialButton(
-              shape: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: BorderSide.none,
-              ),
-              color: Colors.grey.shade300,
-              onPressed: () {
-                context.read<ProductBloc>().add(LoadProductEvent());
-              },
-              child: Container(
-                width: 100,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Icon(
-                      Icons.restart_alt_rounded,
-                      color: Colors.grey.shade600,
-                    ),
-                    Text(
-                      'Retry',
-                      style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontWeight: FontWeight.bold),
-                    )
-                  ],
+          print("🔴 Error: ${state.message}");
+          return Container(
+            height: 100,
+            width: double.infinity,
+            child: Center(
+              child: MaterialButton(
+                shape: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide.none,
+                ),
+                color: Colors.grey.shade300,
+                onPressed: () {
+                  context.read<ProductBloc>().add(LoadProductEvent());
+                },
+                child: Container(
+                  width: 100,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(
+                        Icons.restart_alt_rounded,
+                        color: Colors.grey.shade600,
+                      ),
+                      Text(
+                        'Retry',
+                        style: TextStyle(
+                            color: Colors.grey.shade600,
+                            fontWeight: FontWeight.bold),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

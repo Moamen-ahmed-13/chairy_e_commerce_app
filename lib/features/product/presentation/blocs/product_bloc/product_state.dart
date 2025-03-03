@@ -1,6 +1,5 @@
 import 'package:chairy_e_commerce_app/features/product/domain/entities/product.dart';
 import 'package:equatable/equatable.dart';
-import '../../../data/models/product_model.dart';
 
 abstract class ProductState extends Equatable {
   const ProductState();

@@ -11,7 +11,6 @@ import 'package:chairy_e_commerce_app/features/product/domain/entities/product.d
 import 'package:dio/dio.dart';
 
 import '../../data/datasource/product_remote_data_source.dart';
-import '../../data/models/product_model.dart';
 
 class ProductRepository {
   final Dio dio = Dio();

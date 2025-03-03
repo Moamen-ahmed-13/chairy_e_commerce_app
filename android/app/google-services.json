@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "6689500504",
+    "project_id": "chairy-e-commerce-app",
+    "storage_bucket": "chairy-e-commerce-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6689500504:android:f3e73aa07ff1977b6d092d",
+        "android_client_info": {
+          "package_name": "com.example.chairy_e_commerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6689500504-ql966rus863872isre5gbra1hph608fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chairy_e_commerce_app",
+            "certificate_hash": "bb3cc9013fe1efc516a3dd15b038221c731183e6"
+          }
+        },
+        {
+          "client_id": "6689500504-dma9788tik506jr7un5goai0vqggemhn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqRGZcCqwBPoc2jJiqKsRzY5BIuf5W-F4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "6689500504-dma9788tik506jr7un5goai0vqggemhn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "6689500504-nethqfd06qpqs42lus1jao29aolvdeps.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.chairyECommerceApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

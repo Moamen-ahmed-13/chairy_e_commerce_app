@@ -1,3 +1,5 @@
+import 'package:chairy_e_commerce_app/features/product/domain/entities/cart_item.dart';
+import 'package:chairy_e_commerce_app/features/product/domain/entities/product.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/pages/checkout_screen.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/pages/product_page.dart';
 import 'package:flutter/material.dart';
@@ -28,23 +30,37 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case AppRoutes.home:
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return MaterialPageRoute(
+            builder: (_) => const MainScreen(initialIndex: 0));
 
       case AppRoutes.main:
         return MaterialPageRoute(builder: (_) => const MainScreen());
 
       case AppRoutes.checkout:
-        return MaterialPageRoute(builder: (_) => const CheckoutScreen());
+        return MaterialPageRoute(builder: (_) => CheckoutScreen());
 
       case AppRoutes.productPage:
-        return MaterialPageRoute(builder: (_) => ProductPage());
+        return MaterialPageRoute(builder: (_) => MainScreen(initialIndex: 1));
 
       case AppRoutes.cartPage:
-        return MaterialPageRoute(builder: (_) => CartScreen());
+        return MaterialPageRoute(builder: (_) => MainScreen(initialIndex: 2));
 
       case AppRoutes.productDetails:
-        final product = settings.arguments;
-        return MaterialPageRoute(builder: (_) => ProductDetailsScreen());
+        final CartItem cartItem = settings.arguments as CartItem;
+        // ✅ Convert `CartItem` to `ProductEntity` before passing it
+        ProductEntity productEntity = ProductEntity(
+          id: cartItem.id,
+          title: cartItem.title,
+          description: "", // Add proper description
+          price: cartItem.price,
+          discount: "0", // Adjust discount if needed
+          discountPrice: cartItem.price, // Modify if needed
+          quantity: cartItem.quantity,
+        );
+        return MaterialPageRoute(
+            builder: (_) => ProductDetailsScreen(
+                  product: productEntity,
+                ));
 
       case AppRoutes.settingsMenu:
         return MaterialPageRoute(builder: (_) => const SettingsMenuScreen());

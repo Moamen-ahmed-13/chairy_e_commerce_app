@@ -1,41 +1,22 @@
-import 'package:equatable/equatable.dart';
-import 'package:chairy_e_commerce_app/features/product/domain/entities/product.dart';
 
-abstract class CartEvent extends Equatable {
-  const CartEvent();
+import 'package:chairy_e_commerce_app/features/product/domain/entities/cart_item.dart';
 
-  @override
-  List<Object?> get props => [];
+abstract class CartEvent {}
+
+class LoadCart extends CartEvent {}
+
+class AddToCart extends CartEvent {
+  final CartItem item;
+  AddToCart(this.item);
 }
 
-class LoadCartEvent extends CartEvent {}
-
-class AddToCartEvent extends CartEvent {
-  final ProductEntity product;
-
-  const AddToCartEvent(this.product);
-
-  @override
-  List<Object?> get props => [product];
-}
-
-class RemoveFromCartEvent extends CartEvent {
-  final ProductEntity product;
-
-  const RemoveFromCartEvent(this.product);
-
-  @override
-  List<Object?> get props => [product];
+class RemoveFromCart extends CartEvent {
+  final String id;
+  RemoveFromCart(this.id);
 }
 
 class UpdateCartQuantity extends CartEvent {
-  final ProductEntity product;
+  final String id;
   final int quantity;
-
-  const UpdateCartQuantity(this.product, this.quantity);
-
-  @override
-  List<Object?> get props => [product, quantity];
+  UpdateCartQuantity(this.id, this.quantity);
 }
-
-class ClearCart extends CartEvent {}

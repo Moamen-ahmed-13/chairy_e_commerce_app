@@ -16,8 +16,8 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _searchController = TextEditingController();
-  late List<ProductEntity> searchedProducts;
-  late List<ProductEntity> allProducts;
+  List<ProductEntity> searchedProducts = [];
+  List<ProductEntity> allProducts = [];
 
   @override
   void initState() {
@@ -151,19 +151,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                 : allProducts.length,
                             itemBuilder: (context, index) {
                               return ProductCard(
-                                  product: _searchController.text.isNotEmpty
-                                      ? searchedProducts[index]
-                                      : allProducts[index],
+                                  productEntity:
+                                      _searchController.text.isNotEmpty
+                                          ? searchedProducts[index]
+                                          : allProducts[index],
                                   index: index);
                             },
                           )
-                        : Column(
-                            children: [
-                              SizedBox(height: 60),
-                              Image.asset('assets/images/search.png'),
-                            ],
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 60),
+                                Image.asset('assets/images/search.png'),
+                              ],
+                            ),
                           );
-                    ;
                   } else if (state is ProductError) {
                     return Center(
                       child: Text(

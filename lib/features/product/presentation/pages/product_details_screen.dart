@@ -1,3 +1,4 @@
+import 'package:chairy_e_commerce_app/features/product/domain/entities/cart_item.dart';
 import 'package:chairy_e_commerce_app/features/product/domain/entities/product.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_bloc/cart_event.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/widgets/custom_app_bar.dart';
@@ -10,9 +11,14 @@ import '../blocs/cart_bloc/cart_bloc.dart';
 import '../blocs/cart_bloc/cart_state.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
-  ProductDetailsScreen({super.key, this.product, this.imageUrl});
-  ProductEntity? product;
-  String? imageUrl;
+  final ProductEntity product;
+  final String? imageUrl;
+
+  ProductDetailsScreen({
+    super.key,
+    required this.product,
+    this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +65,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      '  ${product?.title ?? 'Chair'}',
+                      '  ${product.title}',
                       style: TextStyle(
                         color: mainColor,
                       ),
@@ -78,7 +84,7 @@ class ProductDetailsScreen extends StatelessWidget {
                   image: DecorationImage(
                     image: imageUrl != null && imageUrl!.isNotEmpty
                         ? AssetImage(imageUrl!)
-                        : const AssetImage('assets/images/6.png'),
+                        : const AssetImage('assets/images/bouclé_chair.png'),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -88,7 +94,7 @@ class ProductDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    product?.title ?? "Chaire",
+                    product.title,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -97,7 +103,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    '₤ ${product?.discountPrice ?? "90.99"}',
+                    '₤ ${product.discountPrice.toStringAsFixed(2)}',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -108,7 +114,7 @@ class ProductDetailsScreen extends StatelessWidget {
               ),
               SizedBox(height: 20),
               Text(
-                '${product?.description ?? "\nAs the name suggests it, this is the ‘jack of all trades’ of chairs; it goes in any room, with any design and serves multiple purposes that go with all upholstery options.L45 x D47 x H90 cm"}',
+                product.description,
                 style: TextStyle(
                   fontSize: 14,
                   color: Theme.of(context).primaryColor,
@@ -120,7 +126,13 @@ class ProductDetailsScreen extends StatelessWidget {
                   return CustomButton(
                     text: 'Add to Cart',
                     onPressed: () {
-                      context.read<CartBloc>().add(AddToCartEvent(product!));
+                      final cartItem = CartItem(
+                        id: product.id,
+                        title: product.title,
+                        price: product.discountPrice,
+                        quantity: 1,
+                      );
+                      context.read<CartBloc>().add(AddToCart(cartItem));
                       Navigator.pushNamed(context, '/cart-page');
                     },
                   );
