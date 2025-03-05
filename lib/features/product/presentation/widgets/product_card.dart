@@ -5,6 +5,7 @@ import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_b
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/cart_bloc/cart_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../domain/entities/product.dart';
 import '../pages/product_details_screen.dart';
@@ -164,6 +165,14 @@ class ProductCard extends StatelessWidget {
                           price: productEntity.price,
                           quantity: productEntity.quantity,
                         )));
+                    Fluttertoast.showToast(
+                      msg: "Added to cart!",
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.BOTTOM,
+                      backgroundColor: Colors.grey.shade200,
+                      textColor: Colors.black,
+                    );
+
                     print('add to cart');
                   },
                   child: Container(

@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../features/product/data/datasource/auth_remote_data_source.dart';
 import '../../features/product/data/datasource/product_remote_data_source.dart';
 import 'injection_container.config.dart';
 
@@ -37,9 +36,6 @@ Future<void> init(GetIt sl) async {
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   sl.registerLazySingleton<GoogleSignIn>(() => GoogleSignIn());
 
-  sl.registerLazySingleton<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(sl<FirebaseAuth>()),
-  );
 
 }
 
