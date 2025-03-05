@@ -9,8 +9,6 @@ import 'package:injectable/injectable.dart';
 
 import '../../features/product/data/datasource/auth_remote_data_source.dart';
 import '../../features/product/data/datasource/product_remote_data_source.dart';
-import '../../features/product/domain/repositories/auth_repository.dart';
-import '../../features/product/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'injection_container.config.dart';
 
 final sl = GetIt.instance;
@@ -43,9 +41,6 @@ Future<void> init(GetIt sl) async {
     () => AuthRemoteDataSourceImpl(sl<FirebaseAuth>()),
   );
 
-  // sl.registerFactory(
-  //   () => AuthBloc(authRepository: sl<AuthRepository>()),
-  // );
 }
 
 @InjectableInit(

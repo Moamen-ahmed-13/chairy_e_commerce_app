@@ -1,3 +1,4 @@
+
 import 'package:chairy_e_commerce_app/constants.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +10,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.validator,
     required this.onSaved,
     required this.secured,
-    required TextEditingController controller,
+    required this.controller, // Add this line
   });
 
   final bool secured;
@@ -17,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final String hintText;
   final String? Function(String?) validator;
   final void Function(String?) onSaved;
+  final TextEditingController controller; // Add this line
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +30,7 @@ class CustomTextFormField extends StatelessWidget {
           style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
         ),
         TextFormField(
+          controller: controller, // Use the passed controller
           obscureText: secured,
           validator: validator,
           onSaved: onSaved,

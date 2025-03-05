@@ -71,6 +71,7 @@ class CheckoutScreen extends StatelessWidget {
                           .where((step) => step != CheckoutStep.finish)
                           .map((step) {
                         return _buildStepIndicator(
+                          context,
                           title: step.name.toUpperCase(),
                           isDone: step.index < state.currentStep.index,
                           isActive: step == state.currentStep,
@@ -92,7 +93,8 @@ class CheckoutScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStepIndicator({
+  Widget _buildStepIndicator(
+    BuildContext context, {
     required String title,
     required bool isActive,
     required bool isDone,
@@ -152,7 +154,7 @@ class CheckoutScreen extends StatelessWidget {
           Container(
             // خط رمادي للمراحل القادمة
             height: 1,
-            width: 15,
+            width: MediaQuery.of(context).size.width * .06,
             decoration: BoxDecoration(
               color: isDone
                   ? Color.fromARGB(255, 4, 221, 65)

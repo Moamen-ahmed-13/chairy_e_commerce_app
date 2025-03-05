@@ -1,14 +1,10 @@
 import 'package:chairy_e_commerce_app/config/router/app_router.dart';
-import 'package:chairy_e_commerce_app/features/product/data/datasource/auth_remote_data_source.dart';
-import 'package:chairy_e_commerce_app/features/product/domain/repositories/auth_repository.dart';
 import 'package:chairy_e_commerce_app/features/product/domain/repositories/cart_repository.dart';
 import 'package:chairy_e_commerce_app/features/product/domain/repositories/product_repository.dart';
-import 'package:chairy_e_commerce_app/features/product/presentation/blocs/auth_bloc/auth_bloc.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/localization_bloc/localization_bloc.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/product_bloc/product_event.dart';
 import 'package:chairy_e_commerce_app/features/product/presentation/blocs/theme_bloc/theme_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -77,10 +73,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-            create: (context) => AuthBloc(
-                authRepository: AuthRepositoryImpl(
-                    AuthRemoteDataSourceImpl(FirebaseAuth.instance)))),
         BlocProvider(create: (context) => CheckoutBloc()),
         BlocProvider(
             create: (context) => CartBloc(CartRepository())..add(LoadCart())),

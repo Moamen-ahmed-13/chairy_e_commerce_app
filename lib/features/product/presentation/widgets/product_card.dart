@@ -89,7 +89,7 @@ class ProductCard extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 productEntity.discount != '0.00'
                     ? hasDiscount()
                     : hasNoDiscount(),
@@ -209,11 +209,11 @@ class ProductCard extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     context.read<CartBloc>().add(AddToCart(CartItem(
-                      id: productEntity.id,
-                      title: productEntity.title,
-                      price: productEntity.price,
-                      quantity: productEntity.quantity,
-                    )));
+                          id: productEntity.id,
+                          title: productEntity.title,
+                          price: productEntity.price,
+                          quantity: productEntity.quantity,
+                        )));
                     print('add to cart');
                   },
                   child: Container(

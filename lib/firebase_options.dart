@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,9 +28,15 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
-        return windows;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for windows - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -39,16 +48,6 @@ class DefaultFirebaseOptions {
         );
     }
   }
-
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD_3DoTRDkzvStHpb4SXKsWs5-eb_xXeZ0',
-    appId: '1:6689500504:web:980c2646580308736d092d',
-    messagingSenderId: '6689500504',
-    projectId: 'chairy-e-commerce-app',
-    authDomain: 'chairy-e-commerce-app.firebaseapp.com',
-    storageBucket: 'chairy-e-commerce-app.firebasestorage.app',
-    measurementId: 'G-0GRBB1YR5S',
-  );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCqRGZcCqwBPoc2jJiqKsRzY5BIuf5W-F4',
@@ -64,25 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '6689500504',
     projectId: 'chairy-e-commerce-app',
     storageBucket: 'chairy-e-commerce-app.firebasestorage.app',
+    androidClientId: '6689500504-ql966rus863872isre5gbra1hph608fp.apps.googleusercontent.com',
+    iosClientId: '6689500504-nethqfd06qpqs42lus1jao29aolvdeps.apps.googleusercontent.com',
     iosBundleId: 'com.example.chairyECommerceApp',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyDELi5vmo7VYZPRmeFYx5cJFik5981lPR4',
-    appId: '1:6689500504:ios:46a45ee197e0fdde6d092d',
-    messagingSenderId: '6689500504',
-    projectId: 'chairy-e-commerce-app',
-    storageBucket: 'chairy-e-commerce-app.firebasestorage.app',
-    iosBundleId: 'com.example.chairyECommerceApp',
-  );
-
-  static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyD_3DoTRDkzvStHpb4SXKsWs5-eb_xXeZ0',
-    appId: '1:6689500504:web:8684915e9406e1726d092d',
-    messagingSenderId: '6689500504',
-    projectId: 'chairy-e-commerce-app',
-    authDomain: 'chairy-e-commerce-app.firebaseapp.com',
-    storageBucket: 'chairy-e-commerce-app.firebasestorage.app',
-    measurementId: 'G-MJZJHS0W7N',
   );
 }
