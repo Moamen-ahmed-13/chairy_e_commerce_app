@@ -252,13 +252,6 @@ class CartScreen extends StatelessWidget {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
         if (state is CartLoaded) {
-          // final totalPrice = state.cartItems.fold(
-          //     0.0,
-          //     (num sum, item) =>
-          //         sum +
-          //         ((double.tryParse(item.discountPrice ?? '0.0') ?? 0.0) *
-          //             item.quantity));
-
           return Column(
             children: [
               Divider(),

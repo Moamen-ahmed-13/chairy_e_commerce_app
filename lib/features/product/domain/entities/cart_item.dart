@@ -4,13 +4,13 @@ class CartItem extends Equatable {
   final String id;
   final String title;
   final double price;
-  int quantity = 1; // لم يعد `final` حتى يمكن تعديله مباشرةً
+  late int quantity; // لم يعد `final` حتى يمكن تعديله مباشرةً
 
   CartItem({
     required this.id,
     required this.title,
     required this.price,
-    required this.quantity,
+    this.quantity = 1,
   });
 
   CartItem copyWith({int? quantity}) {
@@ -26,14 +26,14 @@ class CartItem extends Equatable {
         'id': id,
         'title': title,
         'price': price,
-        'quantity': quantity,
+        'Quantity': quantity,
       };
 
   factory CartItem.fromJson(Map<String, dynamic> json) => CartItem(
         id: json['id'],
         title: json['title'],
         price: (json['price'] as num).toDouble(),
-        quantity: json['quantity'],
+        quantity: json['Quantity'],
       );
 
   @override

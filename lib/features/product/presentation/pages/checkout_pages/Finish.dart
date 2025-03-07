@@ -37,7 +37,7 @@ class Finish extends StatelessWidget {
           CustomButton(
             text: 'Go to home',
             onPressed: () {
-              Navigator.of(context).pushNamed('/home');
+              Navigator.of(context).pushReplacementNamed('/home');
             },
           ),
         ],

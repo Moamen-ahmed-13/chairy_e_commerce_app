@@ -46,7 +46,7 @@ class ProductEntity extends Equatable {
         'price': price,
         'discount_Price': discountPrice,
         'discount': discount,
-        'quantity': quantity,
+        'Quantity': quantity,
       };
 
   factory ProductEntity.fromJson(Map<String, dynamic> json) => ProductEntity(
@@ -58,7 +58,7 @@ class ProductEntity extends Equatable {
             (double.tryParse(json['discount_Price'].toString()) ?? 0.0)
                 .toDouble(),
         discount: json['discount'].toString(),
-        quantity: json['quantity'] ?? 1,
+        quantity: json['Quantity'] ?? 1,
       );
 
   @override

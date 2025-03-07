@@ -17,8 +17,10 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Future<void> _onLoadCart(LoadCart event, Emitter<CartState> emit) async {
     emit(CartLoading());
     try {
-      final cartItems = await cartRepository.getCartItemsFromDB(); // ✅ تحميل البيانات من SQLite
-      final totalPrice = await cartRepository.getTotalPrice();
+      final cartItems =
+          await cartRepository.getCartItemsFromDB(); // Fetch from local DB
+      final totalPrice =
+          await cartRepository.getTotalPrice(); // Calculate total price
       emit(CartLoaded(cartItems: cartItems, totalPrice: totalPrice));
     } catch (e) {
       emit(CartError('Failed to load cart: $e'));
@@ -33,22 +35,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           orElse: () => CartItem(id: '', title: '', price: 0, quantity: 0));
 
       if (existingItem.id.isEmpty) {
-        // ✅ إضافة منتج جديد
         final updatedCart = List<CartItem>.from(currentState.cartItems)
           ..add(event.item.copyWith(quantity: 1));
 
-        await cartRepository.insertCartItem(event.item); // ✅ حفظ في SQLite
+        await cartRepository.insertCartItem(event.item);
 
         final newTotalPrice = updatedCart.fold(
             0.0, (sum, item) => sum + (item.price * item.quantity));
 
         emit(CartLoaded(cartItems: updatedCart, totalPrice: newTotalPrice));
       } else {
-        // ✅ تحديث الكمية فقط
         final updatedCart = currentState.cartItems.map((item) {
           if (item.id == event.item.id) {
             final updatedItem = item.copyWith(quantity: item.quantity + 1);
-            cartRepository.updateCartItemQuantity(item.id, updatedItem.quantity);
+            cartRepository.updateCartItemQuantity(
+                item.id, updatedItem.quantity);
             return updatedItem;
           }
           return item;
@@ -62,24 +63,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
-  Future<void> _onRemoveFromCart(RemoveFromCart event, Emitter<CartState> emit) async {
+  Future<void> _onRemoveFromCart(
+      RemoveFromCart event, Emitter<CartState> emit) async {
     final currentState = state;
     if (currentState is CartLoaded) {
-      final updatedCart = currentState.cartItems.where((item) => item.id != event.id).toList();
-      await cartRepository.deleteCartItem(event.id); // ✅ حذف من SQLite
+      final updatedCart =
+          currentState.cartItems.where((item) => item.id != event.id).toList();
+      await cartRepository.deleteCartItem(event.id);
 
-      final newTotalPrice = updatedCart.fold(0.0, (sum, item) => sum + (item.price * item.quantity));
+      final newTotalPrice = updatedCart.fold(
+          0.0, (sum, item) => sum + (item.price * item.quantity));
       emit(CartLoaded(cartItems: updatedCart, totalPrice: newTotalPrice));
     }
   }
 
-  Future<void> _onUpdateCartQuantity(UpdateCartQuantity event, Emitter<CartState> emit) async {
+  Future<void> _onUpdateCartQuantity(
+      UpdateCartQuantity event, Emitter<CartState> emit) async {
     final currentState = state;
     if (currentState is CartLoaded) {
       final updatedCart = currentState.cartItems.map((item) {
         if (item.id == event.id) {
-          final updatedItem = item.copyWith(quantity: event.quantity > 0 ? event.quantity : 1);
-          cartRepository.updateCartItemQuantity(item.id, updatedItem.quantity); // ✅ تحديث الكمية في SQLite
+          final updatedItem =
+              item.copyWith(quantity: event.quantity > 0 ? event.quantity : 1);
+          cartRepository.updateCartItemQuantity(item.id, updatedItem.quantity);
           return updatedItem;
         }
         return item;
