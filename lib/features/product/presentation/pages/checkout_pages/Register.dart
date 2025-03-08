@@ -95,6 +95,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -124,18 +125,22 @@ class _RegisterState extends State<Register> {
             ),
           ),
           _tabSwitcher(context),
-          _isSignIn ? _signinContainer(context) : _signUpContainer(context),
+          _isSignIn
+              ? _signinContainer(context, isDarkMode)
+              : _signUpContainer(context, isDarkMode),
         ],
       ),
     );
   }
 
-  Widget _signinContainer(BuildContext context) {
+  Widget _signinContainer(BuildContext context, bool isDarkMode) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 18, vertical: 15),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: isDarkMode
+              ? const Color.fromRGBO(34, 21, 6, 1)
+              : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -276,12 +281,18 @@ class _RegisterState extends State<Register> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Container(height: 1, width: 100, color: Colors.black),
+                    Container(
+                        height: 1,
+                        width: 100,
+                        color: Theme.of(context).primaryColor),
                     Text(
                       'Or',
                       style: TextStyle(fontSize: 12),
                     ),
-                    Container(height: 1, width: 100, color: Colors.black),
+                    Container(
+                        height: 1,
+                        width: 100,
+                        color: Theme.of(context).primaryColor),
                   ],
                 ),
                 SizedBox(height: 5),
@@ -305,13 +316,15 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget _signUpContainer(BuildContext context) {
+  Widget _signUpContainer(BuildContext context, bool isDarkMode) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 18, vertical: 15),
       child: Container(
         height: MediaQuery.of(context).size.height * 0.66,
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: isDarkMode
+              ? const Color.fromRGBO(34, 21, 6, 1)
+              : Colors.grey.shade100,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -480,7 +493,7 @@ class _RegisterState extends State<Register> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Icon(icon, color: Colors.black),
+        Icon(icon, color: Theme.of(context).primaryColor),
         SizedBox(width: 10),
         Expanded(
           child: CustomTextFormField(
@@ -504,6 +517,7 @@ class _RegisterState extends State<Register> {
   }
 
   Widget _tabSwitcher(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -511,28 +525,40 @@ class _RegisterState extends State<Register> {
           setState(() {
             _isSignIn = true;
           });
-        }),
+        }, isDarkMode),
         _tabButton(context, "Sign Up", !_isSignIn, () {
           setState(() {
             _isSignIn = false;
           });
-        }),
+        }, isDarkMode),
       ],
     );
   }
 
   Widget _tabButton(BuildContext context, String text, bool isActive,
-      VoidCallback onPressed) {
+      VoidCallback onPressed, bool isDarkMode) {
     return GestureDetector(
       onTap: onPressed,
       child: Container(
         width: MediaQuery.of(context).size.width * .5,
         padding: EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isActive ? Colors.orange.shade100 : Colors.grey.shade100,
+          color: isDarkMode
+              ? isActive
+                  ? const Color.fromRGBO(34, 21, 6, 1)
+                  : Colors.transparent
+              : isActive
+                  ? Colors.orange.shade100
+                  : Colors.grey.shade100,
           border: Border(
               bottom: BorderSide(
-                  color: isActive ? mainColor : Colors.grey.shade100,
+                  color: isDarkMode
+                      ? isActive
+                          ? mainColor
+                          : Colors.transparent
+                      : isActive
+                          ? mainColor
+                          : Colors.grey.shade100,
                   width: 2)),
         ),
         child: Center(

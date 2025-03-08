@@ -16,6 +16,7 @@ class CheckoutScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return BlocBuilder<CheckoutBloc, CheckoutState>(
       builder: (context, state) {
         Widget currentStepWidget;
@@ -71,6 +72,7 @@ class CheckoutScreen extends StatelessWidget {
                           .where((step) => step != CheckoutStep.finish)
                           .map((step) {
                         return _buildStepIndicator(
+                          isDarkMode,
                           context,
                           title: step.name.toUpperCase(),
                           isDone: step.index < state.currentStep.index,
@@ -80,6 +82,7 @@ class CheckoutScreen extends StatelessWidget {
                     ),
                     Divider(
                       color: Colors.grey.shade300,
+                      thickness: .5,
                     ),
                     SizedBox(height: 10),
                   ],
@@ -94,6 +97,7 @@ class CheckoutScreen extends StatelessWidget {
   }
 
   Widget _buildStepIndicator(
+    bool isDarkMode,
     BuildContext context, {
     required String title,
     required bool isActive,
@@ -112,7 +116,9 @@ class CheckoutScreen extends StatelessWidget {
                 : (isActive
                     ? Color.fromRGBO(
                         255, 223, 186, 1) // 🔶 أصفر للمرحلة الحالية
-                    : Colors.grey.shade200), // ⚪ رمادي للمراحل القادمة
+                    : isDarkMode
+                        ? Colors.transparent
+                        : Colors.grey.shade200), // ⚪ رمادي للمراحل القادمة
           ),
           child: Row(
             children: [

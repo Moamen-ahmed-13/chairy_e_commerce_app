@@ -41,6 +41,7 @@ class Review extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -67,9 +68,9 @@ class Review extends StatelessWidget {
               ),
             ),
             SizedBox(height: 25),
-            _buildInfoSection(context),
+            _buildInfoSection(context, isDarkMode),
             SizedBox(height: 20),
-            _buildCartSummary(context),
+            _buildCartSummary(context, isDarkMode),
             SizedBox(height: 10),
             Divider(),
             _buildTotalPrice(context),
@@ -88,15 +89,12 @@ class Review extends StatelessWidget {
   }
 
   /// ✅ **عرض عنوان الشحن وطريقة الدفع**
-  Widget _buildInfoSection(BuildContext context) {
+  Widget _buildInfoSection(BuildContext context, bool isDarkMode) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        _buildInfoCard(
-          'Delivery Address',
-          '123 Main St, Apt 101, New York, NY 10001',
-          context,
-        ),
+        _buildInfoCard('Delivery Address',
+            '123 Main St, Apt 101, New York, NY 10001', context, isDarkMode),
         BlocBuilder<CheckoutBloc, CheckoutState>(
           builder: (context, state) {
             String paymentMethod = state.paymentMethod.isNotEmpty
@@ -110,8 +108,12 @@ class Review extends StatelessWidget {
               paymentImage = 'assets/images/paypal.png';
             }
 
-            return _buildInfoCard('Payment', paymentMethod, context,
-                image: paymentImage);
+            return _buildInfoCard(
+                'Payment',
+                paymentMethod,
+                context,
+                image: paymentImage,
+                isDarkMode);
           },
         ),
       ],
@@ -119,7 +121,8 @@ class Review extends StatelessWidget {
   }
 
   /// ✅ **كارت معلومات العنوان أو الدفع**
-  Widget _buildInfoCard(String title, String content, BuildContext context,
+  Widget _buildInfoCard(
+      String title, String content, BuildContext context, bool isDarkMode,
       {String? image}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,7 +139,9 @@ class Review extends StatelessWidget {
           height: 130,
           width: 150,
           decoration: BoxDecoration(
-            color: Colors.grey.shade200,
+            color: isDarkMode
+                ? const Color.fromRGBO(34, 21, 6, 1)
+                : Colors.grey.shade200,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Padding(
@@ -146,7 +151,7 @@ class Review extends StatelessWidget {
               children: [
                 Text(
                   content,
-                  style: TextStyle(color: Colors.black54),
+                  style: TextStyle(color: Theme.of(context).primaryColor),
                 ),
                 if (image != null) ...[
                   SizedBox(height: 10),
@@ -183,13 +188,15 @@ class Review extends StatelessWidget {
   }
 
   /// ✅ **عرض ملخص المنتجات في السلة**
-  Widget _buildCartSummary(BuildContext context) {
+  Widget _buildCartSummary(BuildContext context, bool isDarkMode) {
     return Container(
       height: 300,
       width: double.infinity,
       padding: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        color: Colors.grey.shade200,
+        color: isDarkMode
+            ? const Color.fromRGBO(34, 21, 6, 1)
+            : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(15),
       ),
       child: Column(
@@ -203,7 +210,7 @@ class Review extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
-                    color: Colors.black),
+                    color: Theme.of(context).primaryColor),
               );
             },
           ),
@@ -236,25 +243,33 @@ class Review extends StatelessWidget {
         final cartItem = state.cartItems[index];
         return ListTile(
           contentPadding: EdgeInsets.zero,
-          leading: Image.asset(
-            _getProductImagePath(cartItem.title),
-            width: 60,
-            height: 60,
-            fit: BoxFit.cover,
+          leading: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey.shade200,
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: Image.asset(
+              _getProductImagePath(cartItem.title),
+              width: 60,
+              height: 60,
+              fit: BoxFit.cover,
+            ),
           ),
           title: Text(
             cartItem.title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(
+              color: Theme.of(context).primaryColor,
+            ),
           ),
           subtitle: Text(
             '₤ ${cartItem.price.toStringAsFixed(2)}',
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           trailing: Text(
             'x${cartItem.quantity}',
-            style: TextStyle(color: Colors.black54),
+            style: TextStyle(color: Theme.of(context).primaryColor),
           ),
         );
       },
